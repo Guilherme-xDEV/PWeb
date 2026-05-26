@@ -39,7 +39,6 @@ public class LoginServlet extends HttpServlet {
         req.setAttribute("error", "Login failed. Please try again.");
         req.getRequestDispatcher("/q1/login.jsp").forward(req, resp);
 
-
     }    
 }
 
