@@ -1,3 +1,75 @@
+## Questões Práticas 1-3
+
+## 1.
+De acordo com o enunciado o cookie possui os atributos: 'HttpOnly' e 'Secure', esses atributos definidos na criação do cookie, especialmente o 'HttpOnly', impede um cliente (navegador) de acessar o conteúdo do cookie com javaScript fazendo 'document.cookie'. A afirmação dos estudantes de que a sessão não foi criada por não conseguirem acessar o valor de 'JSESSIONID' está equivocada.
+Para verificar a sessão, pode-se confirmar no painel Application/Storage do navegador e também na aba Network onde pode-se ver se o cookie JSESSIONID é enviado nas requisições subsequentes ao servidor.
+
+## 2.
+A implementação atual é insegura porque utiliza um cookie persistente para armazenar a identidade do estudante, sem os atributos HttpOnly e Secure, permitindo acesso por scripts e aumentando o risco de roubo de sessão. A solução recomendada em Jakarta EE é utilizar HttpSession para armazenar os dados do usuário autenticado, deixando que o contêiner gerencie o cookie JSESSIONID. Durante o login, deve-se criar uma sessão e armazenar nela os dados necessários do usuário. O cookie de sessão deve possuir os atributos HttpOnly, Secure e Path adequado. No logout, é necessário invalidar a sessão com session.invalidate() e remover os cookies associados utilizando setMaxAge(0), garantindo que o usuário não permaneça autenticado após encerrar a sessão.
+
+Proposta de solução: <br>
+1. Login:
+
+String usuario = request.getParameter("usuario");
+String senha = request.getParameter("senha");
+
+HttpSession session = request.getSession();
+session.setAttribute("usuario", usuario);
+
+response.sendRedirect("home.jsp");
+
+2. Logout:
+HttpSession session = request.getSession(false);
+
+if (session != null) {
+    session.invalidate();
+}
+
+Cookie cookie = new Cookie("JSESSIONID", "");
+cookie.setMaxAge(0);
+cookie.setPath(request.getContextPath());
+response.addCookie(cookie);
+
+response.sendRedirect("index.jsp");
+
+## 3.
+
+__1 Código de Criação do Cookie__ <br>
+String idioma = request.getParameter("idioma"); // pt, en ou es
+
+Cookie idiomaCookie = new Cookie("idioma", idioma);
+idiomaCookie.setMaxAge(60 * 60 * 24 * 30); // 30 dias
+idiomaCookie.setPath(request.getContextPath());
+
+response.addCookie(idiomaCookie);
+
+response.getWriter().println("Preferência de idioma salva com sucesso.");
+
+__2 Código para Leitura em Requisições Subsequentes__ <br>
+String idioma = "pt"; // idioma padrão
+
+Cookie[] cookies = request.getCookies();
+
+if (cookies != null) {
+    for (Cookie cookie : cookies) {
+        if ("idioma".equals(cookie.getName())) {
+            idioma = cookie.getValue();
+            break;
+        }
+    }
+}
+
+__3 Código de Aplicação de Preferência__ <br>
+if ("en".equals(idioma)) {
+    response.getWriter().println("Welcome to the Online Courses Platform!");
+}
+else if ("es".equals(idioma)) {
+    response.getWriter().println("¡Bienvenido a la Plataforma de Cursos Online!");
+}
+else {
+    response.getWriter().println("Bem-vindo à Plataforma de Cursos Online!");
+}
+
 ## Questões Teóricas 1-10
 
 ## 1. Qual das alternativas descreve corretamente a principal função de um cookie?
@@ -113,7 +185,7 @@ c) Permitir a identificação e manutenção do contexto do usuário entre múlt
 
 d) Eliminar a necessidade de autenticação.
 
-Resposta: C) O HTTP é <i>stateless<i>, usar um Id permite reconhecer o usuário entre requisições sem que este precise fazer login novamente a cada página acessada.
+Resposta: C) O HTTP é <i>stateless</i>, usar um Id permite reconhecer o usuário entre requisições sem que este precise fazer login novamente a cada página acessada.
 
 ---
 
