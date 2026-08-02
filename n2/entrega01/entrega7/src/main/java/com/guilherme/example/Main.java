@@ -1,89 +1,40 @@
 package com.guilherme.example;
 
-import com.guilherme.example.entities.Instrutor;
+import java.util.Optional;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.guilherme.example.dao.InstrutorDAO;
+import com.guilherme.example.db.DBFactory;
+import com.guilherme.example.entities.Instrutor;
 
 public class Main {
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("cursosPU");
-        EntityManager em = emf.createEntityManager();
+        InstrutorDAO instrutorDAO = new InstrutorDAO();
 
-        // Operações de persistência utilizando o EntityManager
-        Instrutor instrutor = new Instrutor();
-        instrutor.setNome("João Silva");
-        instrutor.setEmail("joao.silva@example.com");
-        instrutor.setBiografia("Especialista em Java e desenvolvimento web.");
+        // Criando um novo instrutor
+        Instrutor novoInstrutor = new Instrutor();
+        novoInstrutor.setNome("Carlos Eduardo");
+        novoInstrutor.setEmail("carlos.eduardo@example.com");
+        novoInstrutor.setBiografia("Especialista em desenvolvimento de software e arquitetura de sistemas.");
 
-        // Iniciando uma transação
-        em.getTransaction().begin();
+        // Persistindo o novo instrutor
+        instrutorDAO.salvar(novoInstrutor);
 
-        // Persistindo a entidade
-        em.persist(instrutor);
-
-        // Confirmando a transação
-        em.getTransaction().commit();
-
-
-        // Criando uma nova instância da entidade Instrutor
-        Instrutor instrutor2 = new Instrutor();
-        instrutor2.setNome("João Silva");
-        instrutor2.setEmail("joao.silva2@example.com");
-        instrutor2.setBiografia("Especialista em Java e desenvolvimento web.");
-
-        // Iniciando uma transação
-        em.getTransaction().begin();
-
-        // Persistindo a entidade
-        em.persist(instrutor2);
-
-        instrutor2.setEmail("silva.joao@example.com"); // Alterando o email do instrutor antes de confirmar a transação
-
-        // Confirmando a transação
-        em.getTransaction().commit();
-
-        // Buscando uma entidade Instrutor pelo ID
-        Instrutor instrutorEncontrado = em.find(Instrutor.class, 1L); // Substitua 1L pelo ID do instrutor que deseja buscar
-        if (instrutorEncontrado != null) {
-            System.out.println("Instrutor encontrado: " + instrutorEncontrado.getNome());
+        // Buscando o instrutor pelo ID
+        Optional<Instrutor> instrutorEncontrado = instrutorDAO.buscarPorId(novoInstrutor.getId());
+        if (instrutorEncontrado.isPresent()) {
+            System.out.println("Instrutor encontrado: " + instrutorEncontrado.get().getNome());
         } else {
             System.out.println("Instrutor não encontrado.");
         }
 
+        // Atualizando o instrutor
+        novoInstrutor.setNome("Carlos E. Silva");
+        instrutorDAO.atualizar(novoInstrutor);
 
-        /*
-        // Suponha que você tenha uma entidade Instrutor desanexada (detached)
-        Instrutor instrutorDetached = new Instrutor();
-        instrutorDetached.setId(1L); // ID da entidade que você deseja atualizar
-        instrutorDetached.setNome("Maria da Silva");
-        instrutorDetached.setEmail("maria.silva@example.com");
+        // Removendo o instrutor
+        instrutorDAO.remover(novoInstrutor.getId());
 
-        em.getTransaction().begin(); // Iniciando uma transação
-
-        // Chamando merge() para atualizar a entidade
-        Instrutor instrutorAtualizado = em.merge(instrutorDetached);
-
-        em.getTransaction().commit(); // Confirmando a transação
-        */
-
-
-        em.getTransaction().begin(); // Iniciando uma transação
-
-        // Buscando a entidade Instrutor que deseja remover
-        Instrutor instrutorParaRemover = em.find(Instrutor.class, 1L);
-        if (instrutorParaRemover != null) {
-            // Removendo a entidade
-            em.remove(instrutorParaRemover);
-            System.out.println("Instrutor removido com sucesso.");
-        } else {
-            System.out.println("Instrutor não encontrado para remoção.");
-        }
-
-        em.getTransaction().commit(); // Confirmando a transação
-
-        em.close();
-        emf.close();
+        // Fechando a fábrica de EntityManager
+        DBFactory.fechar();
     }
 }

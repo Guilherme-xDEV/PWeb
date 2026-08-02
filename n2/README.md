@@ -8,6 +8,8 @@
 <ul>5. Adicionei as annotations conforme o artigo</ul>
 <ul>6. Adicione as colunas de relações entre as tabelas (FK) e suas relações de mapeamento</ul>
 <ul>7. Teste de criação e gerenciamento de objetos mapeados usando EntityManager no Main</ul>
+<ul>8. Criação Do DBFactory para gerenciar Entidades e Classes do DAO</ul>
+<ul>9. Teste da nova arquitetura com código no Main </ul>
 
 A anotação @JoinColumn, na entidade Curso, define a coluna que será utilizada para armazenar a chave estrangeira que referencia o instrutor.
 
