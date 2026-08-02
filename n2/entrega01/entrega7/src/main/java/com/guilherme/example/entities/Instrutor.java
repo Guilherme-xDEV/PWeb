@@ -1,10 +1,13 @@
 package com.guilherme.example.entities;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +26,9 @@ public class Instrutor {
 
     @Column(name = "biografia", nullable = true, length = 500)
     private String biografia;
+
+    @OneToMany(mappedBy = "instrutor") // O atributo 'mappedBy' indica o nome do atributo na tabela curso que faz o mapeamento. 
+    private List<Curso> cursos;
 
     public Instrutor() {}
   
@@ -64,4 +70,8 @@ public class Instrutor {
     public void setBiografia(String biografia) {
         this.biografia = biografia;
     } 
+
+    public List<Curso> getCursos() {
+        return cursos;
+    }
 }

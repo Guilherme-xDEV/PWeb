@@ -1,10 +1,17 @@
 package com.guilherme.example.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,12 +43,17 @@ public class Curso {
     @Column(name = "status", nullable = false, length = 50)
     private String status;
 
+    @ManyToOne                       //vários cursos podem estar associados a um único instrutor
+    @JoinColumn(name = "instrutor_id", nullable = false)
+    private Instrutor instrutor;
 
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Aula> aulas;
 
     public Curso() {}
 
     public Curso(Long id, String titulo, String descricao, Double cargaHoraria, Double preco, String nivel, String url,
-            String status) {
+            String status, Instrutor instrutor) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -50,6 +62,7 @@ public class Curso {
         this.nivel = nivel;
         this.url = url;
         this.status = status;
+        this.instrutor = instrutor;
     }
 
     public Long getId() {
@@ -114,5 +127,28 @@ public class Curso {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Instrutor getInstrutor() {
+        return instrutor;
+    }
+
+    public void setInstrutor(Instrutor instrutor) {
+        this.instrutor = instrutor;
+    }
+
+    public void adicionarAula(Aula aula) {
+        if (aulas == null) {
+        aulas = new ArrayList<>();
+        }
+        aulas.add(aula);
+        aula.setCurso(this); // Define o curso da aula, passando esta instância (this) de Curso.
+    }
+
+    public void removerAula(Aula aula) {
+        if (aulas != null) {
+        aulas.remove(aula);
+        aula.setCurso(null); // Remove a referência do curso na aula
+        }
     }
 }
