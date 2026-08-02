@@ -1,10 +1,27 @@
 package com.guilherme.example.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name =  "instrutor")
 public class Instrutor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+     
+    @Column(name = "nome", nullable = false, length = 100) //Caso a anotação @Column não seja utilizada, o JPA utilizará o nome do atributo como nome da coluna por padrão.
     private String nome;
+
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
+
+    @Column(name = "biografia", nullable = true, length = 500)
     private String biografia;
 
     public Instrutor() {}

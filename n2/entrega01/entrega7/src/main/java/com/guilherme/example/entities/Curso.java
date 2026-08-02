@@ -1,21 +1,47 @@
 package com.guilherme.example.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "curso")
 public class Curso {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "titulo", nullable = false, length = 100)
     private String titulo;
+
+    @Column(name = "descricao", nullable = false, length = 500)
     private String descricao;
+
+    @Column(name = "carga_horaria", nullable = false)
     private Double cargaHoraria;
+
+    @Column(name = "preco", nullable = false)
     private Double preco;
+
+    @Column(name = "nivel", nullable = false, length = 50)
     private String nivel;
+
+    @Column(name = "url", nullable = false, length = 200)
     private String url;
+
+    @Column(name = "status", nullable = false, length = 50)
     private String status;
-    private Instrutor instrutor;
+
+
 
     public Curso() {}
 
     public Curso(Long id, String titulo, String descricao, Double cargaHoraria, Double preco, String nivel, String url,
-            String status, Instrutor instrutor) {
+            String status) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -24,7 +50,6 @@ public class Curso {
         this.nivel = nivel;
         this.url = url;
         this.status = status;
-        this.instrutor = instrutor;
     }
 
     public Long getId() {
@@ -89,13 +114,5 @@ public class Curso {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Instrutor getInstrutor() {
-        return instrutor;
-    }
-
-    public void setInstrutor(Instrutor instrutor) {
-        this.instrutor = instrutor;
     }
 }
