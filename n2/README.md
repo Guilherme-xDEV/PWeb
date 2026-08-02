@@ -7,7 +7,7 @@
 <ul>4. Comecei a modelagem das entidades inicialmente sem annotations</ul>
 <ul>5. Adicionei as annotations conforme o artigo</ul>
 <ul>6. Adicione as colunas de relações entre as tabelas (FK) e suas relações de mapeamento</ul>
-
+<ul>7. Teste de criação e gerenciamento de objetos mapeados usando EntityManager no Main</ul>
 
 A anotação @JoinColumn, na entidade Curso, define a coluna que será utilizada para armazenar a chave estrangeira que referencia o instrutor.
 
