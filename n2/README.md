@@ -1,16 +1,44 @@
-<h3>Relatório De Prática + Anotações De Estudo</h3>
+# Relatório de Prática e Anotações de Estudo
+
+## O que foi feito
+
+1. Criei o projeto usando Maven Archetype.
+2. Adicionei as dependências no `pom.xml` e criei o `persistence.xml` em `resources/META-INF`.
+3. Criei os pacotes `db` e `entities` conforme a segunda parte do artigo.
+4. Modelei as entidades inicialmente sem annotations.
+5. Adicionei as annotations conforme o artigo.
+6. Incluí as colunas de relacionamento entre as tabelas (FK) e defini as relações de mapeamento.
+7. Testei a criação e o gerenciamento de objetos mapeados usando `EntityManager` no `Main`.
+8. Criei o `DBFactory` para gerenciar o `EntityManager` e as classes do DAO.
+9. Testei a nova arquitetura com código no `Main`.
+
+## Anotações sobre os artigos
 
 
-<ul>1. Criei o projeto usando Maven Archetype</ul>
-<ul>2. Coloqui as dependências no pom.xml e criei persistence.xml em resources/META-INF</ul>
-<ul>3. Criei os pacotes db e entities seguindo a segunda parte do artigo</ul>
-<ul>4. Comecei a modelagem das entidades inicialmente sem annotations</ul>
-<ul>5. Adicionei as annotations conforme o artigo</ul>
-<ul>6. Adicione as colunas de relações entre as tabelas (FK) e suas relações de mapeamento</ul>
-<ul>7. Teste de criação e gerenciamento de objetos mapeados usando EntityManager no Main</ul>
-<ul>8. Criação Do DBFactory para gerenciar Entidades e Classes do DAO</ul>
-<ul>9. Teste da nova arquitetura com código no Main </ul>
+### Artigo 1: Estados das entidades
 
-A anotação @JoinColumn, na entidade Curso, define a coluna que será utilizada para armazenar a chave estrangeira que referencia o instrutor.
+Os estados das entidades são:
 
-Usar a anotação @JoinColumn é como dizer ao Hibernate que quando aquela variável for mapeada em uma coluna no banco de dados, esta deverá ser uma chave estrangeira, ou seja esse atributo fará a comunicação entre as duas tabelas.
+- `Transient`: criada no código, mas ainda não persistida no banco.
+- `Managed`: persistida no banco e sendo gerenciada pelo Hibernate.
+- `Detached`: persistida no banco, mas não associada ao contexto de persistência atual.
+- `Removed`: marcada para remoção; ainda está em persistência mas será removida.
+
+### Artigo 2: 
+
+Uso de `@JoinColumn`
+
+A anotação `@JoinColumn` na entidade `Curso` define a coluna que será usada para armazenar a chave estrangeira que referencia o `Instrutor`.
+
+Usar `@JoinColumn` indica ao Hibernate que esse atributo deve ser mapeado como chave estrangeira, permitindo a comunicação entre as tabelas.
+
+### Artigo 3: Arquitetura DAO
+
+Organização Modular Do Código
+
+1. Criação da classe DBFactory, que deve fornecer instâncias do EntityManager Para Os DAOs.
+
+2. A arquitetura DAO (Data Access Object) é um padrão de projeto usado para modularizar componentes e separar a lógica de negócio da persistência.
+
+O DAO é responsável por realizar as operações sobre as entidades.
+
